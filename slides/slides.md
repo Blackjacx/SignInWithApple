@@ -81,7 +81,7 @@ slidenumber-style: alignment(right)
 
 ---
 
-# Überblick
+# Sign In With Apple
 
 - schnell, einfach, sicher und privat
 - kein Tracking durch Apple
@@ -205,7 +205,7 @@ Authentication Request returns:
 
 # Registrierung
 
-CODE HERE
+> code beispiele hier
 
 Beim Appstart (schnell):
 
@@ -222,6 +222,8 @@ State-Änderungen:
 ---
 
 # Login
+
+> code beispiele hier
 
 ---
 
@@ -275,9 +277,7 @@ https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what/
 
 ---
 
-# Backup
-
-## TODO
+# Backup - Todo
 
 - Unterschiede zu Facebook Login herausarbeiten
 - create new apple id for live demo - maybe
@@ -286,3 +286,13 @@ https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what/
 - login teil mit code beispielen ausbauen
 - backend teil schreiben
 - Zusammenfassung schreiben
+
+- send the PDF presentation including the github url to ane@ix.de (due 27.11.)
+
+---
+
+# Backup - Mehr Links
+
+- https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what
+- https://www.raywenderlich.com/4875322-sign-in-with-apple-using-swiftui
+- https://9to5mac.com/2019/10/15/how-to-use-sign-in-with-apple-iphone-ipad-mac
