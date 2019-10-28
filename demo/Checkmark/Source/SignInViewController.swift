@@ -4,68 +4,106 @@ import AuthenticationServices
 final class SignInViewController: UIViewController {
 
     @IBOutlet weak var stack: UIStackView!
-    private var credential: ASAuthorizationAppleIDCredential?
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+
+    private let keychain = Keychain()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupDivider()
         setupSignInWithAppleButton()
         setupRevokationListener()
-
-        print("bar")
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        performExistingAccountSetupFlows()
+
+        // Check if the userId is saved in keychain
+        if let userId = keychain.string(for: Constants.Keys.userId) {
+
+            let provider = ASAuthorizationAppleIDProvider()
+
+            // Very fast API to be called on app launch to handle log-in state appropriately.
+            provider.getCredentialState(forUserID: userId) { [weak self] (state, error) in
+
+                DispatchQueue.main.async { [weak self] in
+                    switch state {
+                    case .authorized:   self?.performSignIn(userId: userId) // Apple ID credential is valid
+                    case .revoked:      break // Apple ID credential revoked, sign user out on device and show sign in screen
+                    case .notFound:     break // Apple ID credential not found, show signIn UI
+                    case .transferred:  break
+                    @unknown default:   break
+                    }
+                }
+            }
+        }
+    }
+
+    private func setupDivider() {
+        let divider = DividerView(text: "or", color: .systemGray2)
+        stack.addArrangedSubview(divider)
     }
 
     private func setupSignInWithAppleButton() {
         let button = ASAuthorizationAppleIDButton()
         button.cornerRadius = 22
-        let selector = #selector(handleSignInWithAppleIdButtonPress)
+        let selector = #selector(didPressSignInWithApple)
         button.addTarget(self, action: selector, for: .touchUpInside)
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
         stack.addArrangedSubview(button)
     }
 
     private func setupRevokationListener() {
-        let center = NotificationCenter.default
         let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
-        center.addObserver(forName: name, object: nil, queue: nil) { (notification) in
-            // Sign user out, optionally guide user to sign in again
+        NotificationCenter.default.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
+            DispatchQueue.main.async { [weak self] in
+                self?.performSignOut()
+            }
         }
     }
 
     @objc
-    func handleSignInWithAppleIdButtonPress(_ sender: UIButton) {
-        let provider = ASAuthorizationAppleIDProvider()
-        let request = provider.createRequest()
-        // optional - only request what's required
-        request.requestedScopes = [.email, .fullName]
-
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = self
-        controller.presentationContextProvider = self
-        controller.performRequests()
-    }
-
-    /// Prompts the user if existing Apple ID credential or iCloud Keychain
-    /// credential exists.
-    func performExistingAccountSetupFlows() {
+    func didPressSignInWithApple(_ sender: UIButton) {
         let appleIdRequest = ASAuthorizationAppleIDProvider().createRequest()
-        let passwordRequest = ASAuthorizationPasswordProvider().createRequest()
         // optional - only request what's required
         appleIdRequest.requestedScopes = [.email, .fullName]
 
-        let controller = ASAuthorizationController(authorizationRequests: [appleIdRequest, passwordRequest])
+        let controller = ASAuthorizationController(authorizationRequests: [appleIdRequest])
         controller.delegate = self
         controller.presentationContextProvider = self
         controller.performRequests()
     }
 
-    private func saveUserId(_ userId: String) {
+    private func performSignIn(userId: String, credential: ASAuthorizationAppleIDCredential? = nil) {
+        // For the purpose of this demoapp, remember the credential
+        GlobalState.appleIdCredential = credential
+        GlobalState.userId = userId
+        performSegue(withIdentifier: Constants.Segues.sinInSuccess, sender: nil)
+    }
 
+    private func performSignOut() {
+        emailTextField.text = nil
+        passwordTextField.text = nil
+        keychain.remove(for: Constants.Keys.userId)
+        GlobalState.reset()
+        dismiss(animated: true, completion: nil)
+    }
+
+    // MARK: - IB Support
+
+    @IBAction
+    func prepareForUnwind(segue: UIStoryboardSegue) {
+        performSignOut()
+    }
+    
+    @IBAction func didPressSignIn(_ sender: UIButton) {
+        guard emailTextField.text?.isEmpty == false &&
+            passwordTextField.text?.isEmpty == false else {
+                return
+        }
+        performSegue(withIdentifier: Constants.Segues.sinInSuccess, sender: nil)
     }
 }
 
@@ -78,20 +116,11 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
         switch authorization.credential {
         case let appleIdCredential as ASAuthorizationAppleIDCredential:
 
-            // Create account on your server.
-            // For the purpose of this demo app, store the user identifier in
-            // the keychain.
-            let userId = appleIdCredential.user
-            saveUserId(userId)
+            // Use credential ONLY to create account on your server.
+            // For the purpose of this demo app, store userId in keychain ans pass credential
+            keychain.set(appleIdCredential.user, key: Constants.Keys.userId)
 
-            // For this demo display the Apple ID credential info.
-            let controller = CredentialInfoViewController(credential: appleIdCredential)
-            present(controller, animated: true, completion: nil)
-
-        case let passwordCredential as ASPasswordCredential:
-            // Sign the user in with their existing iCloud Keychain credential.
-            // For the purpose of this demo show the credential as an alert.
-            break
+            performSignIn(userId: appleIdCredential.user, credential: appleIdCredential)
 
         default:
             break
@@ -107,5 +136,17 @@ extension SignInViewController: ASAuthorizationControllerPresentationContextProv
 
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return view.window!
+    }
+}
+
+extension SignInViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case emailTextField: passwordTextField.becomeFirstResponder()
+        case passwordTextField: textField.resignFirstResponder()
+        default: break
+        }
+        return true
     }
 }

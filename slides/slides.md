@@ -28,7 +28,7 @@ slidenumber-style: alignment(right)
 
 ---
 
-# Wer bin ich?
+# About Me
 
 - Stefan Herold *@blackjacxxx*
 - iOS Entwickler seit 2009
@@ -99,7 +99,7 @@ slidenumber-style: alignment(right)
 # Sicher
 
 - kein Passwort
-- On-Device Anti-Fraud Protection
+- On-Device Anti-Fraud
   - On-Device Machine Learning + Account History + Hardware Beschleunigung
   - App erhält 1-Bit Info: User/Unknown
   - only on iOS
@@ -109,7 +109,7 @@ slidenumber-style: alignment(right)
 
 # Privat
 
-![right 25%](media/apps-lambus-settings.jpg)
+![right 75%](media/apps-lambus-settings.jpeg)
 
 Eindeutige, zufällige Email-Adresse
 *<random>@privaterelay.appleid.com*
@@ -181,19 +181,25 @@ Apps die exklusiv third-party / social login service nutzen[^1]
 
 # Registrierung
 
-- Keine lästigen Formulare
-- Keyboard überflüssig
-- Name editierbar
-- Nutzer entscheidet über verwendete Email
-- Fake Email per Relays
-- Keine Verifizierung
-- Keine 2FA
+```swift
+func didPressSignInWithApple(_ sender: UIButton) {
+
+  let provider = ASAuthorizationAppleIDProvider()
+  let request = provider.createRequest()
+  request.requestedScopes = [.email, .fullName] // optional - only request what's required
+
+  let controller = ASAuthorizationController(authorizationRequests: [request])
+  controller.delegate = self
+  controller.presentationContextProvider = self
+  controller.performRequests()
+}
+```
 
 ---
 
 # Registrierung
 
-Authentication Request returns:
+Authorization Request returns:
 - UserID which is unique, stable and team-scoped and can be used as the key to the user / User-ID: eindeutig, stabil über alle Geräte mit gleicher Apple ID
 - Verification Data identity token and short-lived code to refresh token
 - Full Name as PersonNameComponents which contain first/last name separately
@@ -205,25 +211,39 @@ Authentication Request returns:
 
 # Registrierung
 
-> code beispiele hier
+![right 25%](media/apps-checkmark.png)
 
-Beim Appstart (schnell):
-
-```swift
-  provider.getCredentialState(<userID>)
-```
-
-State-Änderungen:
-
-```swift
-  NSNotification.Name.ASAuthorizationAppleIDProviderCredentialRevoked
-```
+- Keine lästigen Formulare
+- Keyboard überflüssig
+- Name editierbar
+- Nutzer entscheidet über verwendete Email
+- Fake Email per Relays
+- Keine Verifizierung
+- Keine 2FA
 
 ---
 
 # Login
 
-> code beispiele hier
+Beim Appstart:
+
+```swift
+let provider = ASAuthorizationAppleIDProvider()
+
+// Very fast API to be called on app launch to handle log-in state appropriately.
+provider.getCredentialState(forUserID: userId) { (state, error) in
+  // evaluate state
+}
+```
+
+State-Änderungen:
+
+```swift
+let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
+center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
+  self?.performSignOut()
+}
+```
 
 ---
 
@@ -280,10 +300,8 @@ https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what/
 # Backup - Todo
 
 - Unterschiede zu Facebook Login herausarbeiten
-- create new apple id for live demo - maybe
+- create new apple id for live demo
 - create backup videos demoing all steps from Summary
-- registrieren teil mit code beispielen ausbauen
-- login teil mit code beispielen ausbauen
 - backend teil schreiben
 - Zusammenfassung schreiben
 
