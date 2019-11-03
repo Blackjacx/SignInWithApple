@@ -20,10 +20,10 @@ slidenumber-style: alignment(right)
 # Agenda
 
 1. Wer bin ich & Was ist ioki?
-2. Sign in With Apple - Überblick & Merkmale
+2. Sign in with Apple - Überblick & Merkmale
 3. Registrierung vs. Login
 4. Backend
-5. Setup Sign in With Apple & Demo
+5. Setup Sign in with Apple & Demo
 6. Summary
 
 ---
@@ -81,7 +81,7 @@ slidenumber-style: alignment(right)
 
 ---
 
-# Sign In With Apple
+# Sign in with Apple
 
 - schnell, einfach, sicher und privat
 - kein Tracking durch Apple
@@ -250,7 +250,7 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 # Demo
 
 - Vorbereitung von Xcode
-- *Sign in With Apple* Button hinzufügen
+- *Sign in with Apple* Button hinzufügen
 - Registrierung neuer Nutzer
 - Login registrierter Nutzer
 - Statuscheck beim Appstart
