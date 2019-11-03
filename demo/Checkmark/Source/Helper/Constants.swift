@@ -9,6 +9,6 @@ enum Constants {
     }
     
     enum Segues {
-        static let sinInSuccess = "signin.success"
+        static let signedInSuccess = "signin.success"
     }
 }

@@ -30,8 +30,9 @@ slidenumber-style: alignment(right)
 
 # About Me
 
-- Stefan Herold *@blackjacxxx*
-- iOS Entwickler seit 2009
+- Stefan Herold • *@blackjacxxx 🐦*
+- Mobile Dev seit 2009
+- WWDC Session Notes • 2K ⭐️
 - Konzern, Agentur und Startup
 - Seit 2017 bei *ioki* im Herzen Frankfurts
 
@@ -43,6 +44,7 @@ slidenumber-style: alignment(right)
 ---
 
 # ioki
+[.build-lists: false]
 
 ![fill](media/ioki-bg-7.jpg)
 
@@ -53,31 +55,32 @@ slidenumber-style: alignment(right)
 
 ^
 1. Tochtergesellschaft DB
-2. Drei Säulen
+1. 3 Säulen
 
 ---
 
 # ioki
+[.build-lists: false]
 
 ![fill](media/ioki-bg-8.jpg)
 
 - Demand Responsive Transport
-- Kein Linienverkehr (Fahrplan)
-- Routen nach Demand berechnet
+- Fahrzeuge nach Bedarf verteilt
 - Leuchtturmprojekt mit HVV Hamburg
 
 ^
-- HVV -> German Mobility Award 2019
+- HVV -> Deutscher Mobilitätspresi 2019
 
 ---
 
 # ioki
+[.build-lists: false]
 
 ![fill](media/ioki-bg-5.jpg)
 
 - Whitelabel
-- Passenger App (iOS / Android)
-- Driver App (React Native > Android Tablets)
+- Passenger App (iOS & Android nativ)
+- Driver App (Android Tablets mit React Native)
 
 ---
 
@@ -87,23 +90,29 @@ slidenumber-style: alignment(right)
 - kein Tracking durch Apple
 - Registrierung und Login
 - App erhält 
-  - stabile, eindeutige *ID*
+  - stabile, eindeutige *userID*
   - *Vor- und Nachame*
-  - verifizierte *Email-Adresse*
-- iOS 13+, iPadOS 13+, watchOS 6+, macOS Catalina 10.15+ tvOS 13+, *JavaScript -> Web, Windows, Android*
-  - OS: nur mit eingeloggtem iCloud Nutzer
-  - Web: beliebige Apple ID
+  - verifizierte *Email Adresse*
+
+--- 
+
+# Sign in with Apple
+
+| Platform | Apple ID  |
+| --- | --- |
+| iOS 13+<br />iPadOS 13+<br />tvOS 13+<br />watchOS 6+<br />macOS Catalina 10.15+ | iCloud Nutzer |
+| Web<br />Windows<br />Android | beliebige Apple ID |
 
 ---
 
 # Sicher
 
-- kein Passwort
-- On-Device Anti-Fraud
-  - On-Device Machine Learning + Account History + Hardware Beschleunigung
-  - App erhält 1-Bit Info: User/Unknown
-  - only on iOS
-- Zwei-Faktor-Authentisierung
+- ~~Passwort~~
+- Anti-Fraud
+  - On-Device Machine Learning & Account History
+  - 1-Bit-Info über Echtheit des Users
+  - iOS only
+- Zwei-Faktor-Authentisierung 
 
 ---
 
@@ -112,25 +121,23 @@ slidenumber-style: alignment(right)
 ![right 75%](media/apps-lambus-settings.jpeg)
 
 Eindeutige, zufällige Email-Adresse
-*<random>@privaterelay.appleid.com*
+*privaterelay.appleid.com*
 
-*Privat:*
--  speichert keine Emails
 - App sieht nur *diese* Adresse
-- Kommunikation mit *einem* Developer
-
-- Zwei-Wege-Email-Kommunikation
+- Kommunikation mit *genau einem* Developer
+- Zwei-Wege-Kanal
 - Über Einstellungen änder-/deaktivierbar
-- Verbunden mit verifizierter Apple ID
+-  speichert keine Emails
 
 ^
-- Relays
+- Facebook $ Co leiten original Email weiter
+- Rückschlüsse auf Nutzerverhalten erschwert
 
 ---
 
-# Wer's braucht
+# Wer's braucht[^1]
 
-Apps die exklusiv third-party / social login service nutzen[^1]
+Apps die exklusiv third-party / social login service nutzen
 
 - Facebook Login
 - Google Sign-In
@@ -138,8 +145,6 @@ Apps die exklusiv third-party / social login service nutzen[^1]
 - Sign In with Linked-In
 - Login with Amazon
 - WeChat Login
-
-[^1]: https://developer.apple.com/app-store/review/guidelines/#sign-in-with-apple
 
 ---
 
@@ -175,7 +180,13 @@ Apps die exklusiv third-party / social login service nutzen[^1]
 - Travel Planner
 - Einkaufslistenapp mit Kundenkarten Wallet
 - Kurze Zusammenfassungen beliebter Sachbücher
-- Versandtracking
+- Tracken von Versandstati
+
+--- 
+
+# Apps
+
+![inline](media/apps-fretello.png) ![inline](media/apps-bird.jpeg) ![inline](media/apps-lambus.jpeg) ![inline](media/apps-bring.jpeg) ![inline](media/apps-blinkist.jpeg) 
 
 ---
 
@@ -200,12 +211,18 @@ func didPressSignInWithApple(_ sender: UIButton) {
 # Registrierung
 
 Authorization Request returns:
-- UserID which is unique, stable and team-scoped and can be used as the key to the user / User-ID: eindeutig, stabil über alle Geräte mit gleicher Apple ID
-- Verification Data identity token and short-lived code to refresh token
-- Full Name as PersonNameComponents which contain first/last name separately
-- Verified email your server doesn't need to verify this email again
-- Real User Indicator high confidence indicator that likely real user
-- Credential State tells if UserID is authorized (let user pass), revoked (handle unlink) or not Found (show login)
+
+- *UserID* • eindeutig, stabil über alle Geräte mit gleicher AppleID
+- *Identity Token* • Nutzerverifizierung 
+- *Auth Code* • Refresh Token
+- *Vor- und Zuname* als PersonNameComponents
+- *Verifizierte Email* - entfällt beim Onboarding
+- *Real User Indicator* - Boolean: User / Unknown
+- *Credential State* - authorized, revoked, notFound
+
+^
+- userID: Bleibt unverändert • selbst nach Trennung von App & AppleID (Settings)
+- userID: Authorisierungs-Status, Accouint Recovery, Account Lockout, Customer Support
 
 ---
 
@@ -213,13 +230,13 @@ Authorization Request returns:
 
 ![right 25%](media/apps-checkmark.png)
 
-- Keine lästigen Formulare
-- Keyboard überflüssig
 - Name editierbar
 - Nutzer entscheidet über verwendete Email
 - Fake Email per Relays
-- Keine Verifizierung
-- Keine 2FA
+- ~~Lästige Formulare~~
+- ~~Keyboard~~
+- ~~Keine Verifizierung~~
+- ~~Keine 2FA~~
 
 ---
 
@@ -258,59 +275,90 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 - Tokeninvalidierung durch Nutzer über iOS Settings
 
 ^
-1. SIWA Capability ➡️ Dev Portal
-2. SIWA Capability ➡️ Xcode
-3. Handle state changes via notification
-4. Revoke
+1. SIWA Capability ➡️ Xcode
+1. Xcode erzeugt App ID mit SIWA Capability ➡️ Dev Portal
+1. CODE DEMO
+1. Revoke
 - Settings.app ➡️ your Apple ID ➡️ Password & Security ➡️ Apps Using your Apple ID
-- If a user revokes Sign in with Apple, but then goes back to register with it in your app, so far in my testing the user value stays the same. This is great news for account recovery / lockout / customer support. Consider this revoke action more of a "log out" than a deletion or something.
+- If a user revokes Sign in with Apple, but then goes back to register with it in your app, 
+so far in my testing the user value stays the same. 
+This is great news for account recovery / lockout / customer support. 
+Consider this revoke action more of a "log out" than a deletion or something.
 
 ---
 
-# Backend
+# Backend Good To Know
 
-https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what/
+[.build-lists: false]
+
+- Identity Token zur Verifizierung der *userID*
+- Private Key zum Entschlüsseln des Tokens
+- Token nur bei Registrierung - 10 min gültig
+- OAuth Flow (Access-/Refresh-Token) notwendig[^2]
+
+---
+
+# Backend - OAuth
+
+![inline](media/oauth.png)
 
 ---
 
 # Zusammenfassung
 
+- Überblick über Vorteile
+- Was bedeuten Sicher & Privat
+- *Theorie:* Registrierung & Login
+- *Praxis:* Erweitern einer bestehenden App
+  - Einrichten von Developer Portal & Xcode
+  - Registrierung, Login, Statusänderungen
+- Exkurs Backend: *Fallstricke*
+
 ---
 
-# Links
+# Vielen Dank Für's Zuhören 🎉
 
 👩‍💻 Apple Docs
 *https://developer.apple.com/sign-in-with-apple*
 👨‍⚖️ Review Guidelines
 *https://developer.apple.com/app-store/review/guidelines/#sign-in-with-apple*
-👨‍💻 REST API zur Nutzer Verifizierung
+👨‍💻 REST API
 *https://developer.apple.com/documentation/signinwithapplerestapi*
 🧐 Demo App Code
 *https://github.com/Blackjacx/SignInWithApple*
 📺 Introducing Sign In with Apple - Session Video Notes
 *https://github.com/Blackjacx/WWDC#introducing-sign-in-with-apple*
 🔑 Token Handling im Backend
-*https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what/*
+*https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what*
 
 🐦 Twitter
 *@blackjacxxx*
 
 ---
 
-# Backup - Todo
+# Backup - Mehr Links
 
-- Unterschiede zu Facebook Login herausarbeiten
-- create new apple id for live demo
-- create backup videos demoing all steps from Summary
-- backend teil schreiben
-- Zusammenfassung schreiben
-
-- send the PDF presentation including the github url to ane@ix.de (due 27.11.)
+- Ray Wenderlich Tutorial mit SwiftUI
+*https://www.raywenderlich.com/4875322-sign-in-with-apple-using-swiftui*
+- Erzeugen des Private Keys
+*https://developer.apple.com/account/resources/authkeys/add*
+- Konfiguration erlaubter Email-Adressen
+*https://developer.apple.com/account/resources/services/configure*
+- Sign in with Apple für Web
+*https://developer.okta.com/blog/2019/06/04/what-the-heck-is-sign-in-with-apple*
+- 9To5Mac Artikel
+*https://9to5mac.com/2019/10/15/how-to-use-sign-in-with-apple-iphone-ipad-mac*
 
 ---
 
-# Backup - Mehr Links
+# Backup - Todo
 
-- https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what
-- https://www.raywenderlich.com/4875322-sign-in-with-apple-using-swiftui
-- https://9to5mac.com/2019/10/15/how-to-use-sign-in-with-apple-iphone-ipad-mac
+- OAuth Diagramm in Sketch
+- create backup videos demoing all steps from Demo section
+
+- use ioki iPhone 7 Plus phone number as trusted number
+- send the PDF presentation including the github url to ane@ix.de (due 27.11.)
+
+[^1]: https://developer.apple.com/app-store/review/guidelines/#sign-in-with-apple
+
+[^2]: https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what

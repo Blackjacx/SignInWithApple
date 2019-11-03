@@ -17,4 +17,8 @@ struct Keychain {
     func string(for key: String) -> String? {
         UserDefaults.standard.string(forKey: key)
     }
+
+    func signOut() {
+        remove(for: Constants.Keys.userId)
+    }
 }

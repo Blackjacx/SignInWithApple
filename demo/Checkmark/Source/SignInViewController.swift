@@ -1,7 +1,7 @@
 import UIKit
 import AuthenticationServices
 
-final class SignInViewController: UIViewController {
+final class SignInViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var emailTextField: UITextField!
@@ -12,7 +12,6 @@ final class SignInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupDivider()
         setupSignInWithAppleButton()
         setupRevokationListener()
     }
@@ -20,8 +19,9 @@ final class SignInViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        // Check if the userId is saved in keychain
         if let userId = keychain.string(for: Constants.Keys.userId) {
+
+            // Sign in with Apple userId found in keychain
 
             let provider = ASAuthorizationAppleIDProvider()
 
@@ -30,7 +30,7 @@ final class SignInViewController: UIViewController {
 
                 DispatchQueue.main.async { [weak self] in
                     switch state {
-                    case .authorized:   self?.performSignIn(userId: userId) // Apple ID credential is valid
+                    case .authorized:   self?.performSignIn() // Apple ID credential is valid
                     case .revoked:      break // Apple ID credential revoked, sign user out on device and show sign in screen
                     case .notFound:     break // Apple ID credential not found, show signIn UI
                     case .transferred:  break
@@ -41,52 +41,55 @@ final class SignInViewController: UIViewController {
         }
     }
 
-    private func setupDivider() {
-        let divider = DividerView(text: "or", color: .systemGray2)
-        stack.addArrangedSubview(divider)
-    }
+    // MARK: - Setup Sign in with Apple Button
 
     private func setupSignInWithAppleButton() {
-        let button = ASAuthorizationAppleIDButton()
-        button.cornerRadius = 22
+        let divider = DividerView(text: "or", color: .systemGray2)
+        stack.addArrangedSubview(divider)
+
+        let button = ASAuthorizationAppleIDButton(authorizationButtonType: .signIn,
+                                                  authorizationButtonStyle: .black)
         let selector = #selector(didPressSignInWithApple)
         button.addTarget(self, action: selector, for: .touchUpInside)
+
+        // Apply app style
+        button.cornerRadius = 22
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
+
         stack.addArrangedSubview(button)
     }
 
+    @objc func didPressSignInWithApple(_ sender: UIButton) {
+        let appleIdRequest = ASAuthorizationAppleIDProvider().createRequest()
+        // optional - only request what's required
+        appleIdRequest.requestedScopes = [.email, .fullName]
+
+        let controller = ASAuthorizationController(authorizationRequests: [appleIdRequest])
+        controller.presentationContextProvider = self
+        controller.delegate = self
+        controller.performRequests()
+    }
+
+    // MARK: - Setup Revocation Listener
+
     private func setupRevokationListener() {
+        let center = NotificationCenter.default
         let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
-        NotificationCenter.default.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
+        center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
             DispatchQueue.main.async { [weak self] in
                 self?.performSignOut()
             }
         }
     }
 
-    @objc
-    func didPressSignInWithApple(_ sender: UIButton) {
-        let appleIdRequest = ASAuthorizationAppleIDProvider().createRequest()
-        // optional - only request what's required
-        appleIdRequest.requestedScopes = [.email, .fullName]
-
-        let controller = ASAuthorizationController(authorizationRequests: [appleIdRequest])
-        controller.delegate = self
-        controller.presentationContextProvider = self
-        controller.performRequests()
-    }
-
-    private func performSignIn(userId: String, credential: ASAuthorizationAppleIDCredential? = nil) {
-        // For the purpose of this demoapp, remember the credential
-        GlobalState.appleIdCredential = credential
-        GlobalState.userId = userId
-        performSegue(withIdentifier: Constants.Segues.sinInSuccess, sender: nil)
+    private func performSignIn() {
+        performSegue(withIdentifier: Constants.Segues.signedInSuccess, sender: nil)
     }
 
     private func performSignOut() {
         emailTextField.text = nil
         passwordTextField.text = nil
-        keychain.remove(for: Constants.Keys.userId)
+        keychain.signOut()
         GlobalState.reset()
         dismiss(animated: true, completion: nil)
     }
@@ -103,7 +106,31 @@ final class SignInViewController: UIViewController {
             passwordTextField.text?.isEmpty == false else {
                 return
         }
-        performSegue(withIdentifier: Constants.Segues.sinInSuccess, sender: nil)
+
+        // Exchange email & password for access token and store it in keychain
+
+        performSignIn()
+    }
+
+    // MARK: - UITextFieldDelegate
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case emailTextField: passwordTextField.becomeFirstResponder()
+        case passwordTextField: textField.resignFirstResponder()
+        default: break
+        }
+        return true
+    }
+}
+
+extension SignInViewController: ASAuthorizationControllerPresentationContextProviding {
+
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+
+        // Return the window the auth dialog should be presented on.
+        // Important for multi-window environments, e.g. common on iPad
+        return view.window!
     }
 }
 
@@ -114,13 +141,29 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                                  didCompleteWithAuthorization authorization: ASAuthorization) {
 
         switch authorization.credential {
-        case let appleIdCredential as ASAuthorizationAppleIDCredential:
+        case let credential as ASAuthorizationAppleIDCredential:
 
-            // Use credential ONLY to create account on your server.
-            // For the purpose of this demo app, store userId in keychain ans pass credential
-            keychain.set(appleIdCredential.user, key: Constants.Keys.userId)
+            let userId: String = credential.user
 
-            performSignIn(userId: appleIdCredential.user, credential: appleIdCredential)
+            // Store userID in keychain
+            keychain.set(userId, key: Constants.Keys.userId)
+
+            // Register or sign in
+            if credential.fullName != nil &&
+                credential.email != nil &&
+                credential.identityToken != nil &&
+                credential.authorizationCode != nil {
+
+                // register NEW account - returns you a token
+            } else {
+                // get token from backend
+            }
+
+            // Use credential ONLY to create account on your server!
+            // For the purpose of this demo, remember it.
+            GlobalState.appleIdCredential = credential
+
+            performSignIn()
 
         default:
             break
@@ -129,24 +172,5 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         // Handle userCancelled or any error
-    }
-}
-
-extension SignInViewController: ASAuthorizationControllerPresentationContextProviding {
-
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return view.window!
-    }
-}
-
-extension SignInViewController: UITextFieldDelegate {
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        switch textField {
-        case emailTextField: passwordTextField.becomeFirstResponder()
-        case passwordTextField: textField.resignFirstResponder()
-        default: break
-        }
-        return true
     }
 }
