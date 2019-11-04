@@ -21,14 +21,7 @@ slidenumber-style: alignment(right)
 
 - Stefan Herold • *@blackjacxxx 🐦*
 - Mobile Dev seit 2009
-- WWDC Session Notes • 2K ⭐️
-- Konzern, Agentur und Startup
 - Seit 2017 bei *ioki* im Herzen Frankfurts
-
-^ 
-- DTAG, N&L und flinc 
-- haben sich mit ride sharing befasst
-- das hat mich zu ioki geführt
 
 ---
 
@@ -338,8 +331,14 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 
 # Backup - Todo
 
-- OAuth Diagramm in Sketch
-- create backup videos demoing all steps from Demo section
+- 1.5h im 1. test mit Fragen zwischendurch
+- email addresse fett von screenshot in text übernehmen (bei `Privat`)
+- Vergleich mit Apple TV
+- Revoke vom Portal aus
+- getCredentialState läuft ohne netzwerkcall (mit conditioner 100% loss)
+- oauth diagramm eventuell rausnehmen :-)
+- ioki teil reduzieren
+- zusammenfassung eventuell rausnehmen
 
 - use ioki iPhone 7 Plus phone number as trusted number
 - send the PDF presentation including the github url to ane@ix.de (due 27.11.)
