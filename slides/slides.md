@@ -338,6 +338,8 @@ Consider this revoke action more of a "log out" than a deletion or something.
 
 # Backup - Mehr Links
 
+- Answers to your bruning questions
+*https://techcrunch.com/2019/06/07/answers-to-your-burning-questions-about-how-sign-in-with-apple-works*
 - Ray Wenderlich Tutorial mit SwiftUI
 *https://www.raywenderlich.com/4875322-sign-in-with-apple-using-swiftui*
 - Erzeugen des Private Keys
