@@ -137,7 +137,7 @@ Eindeutige, zufällige Email-Adresse
 
 # Wer's braucht[^1]
 
-Apps die exklusiv third-party / social login service nutzen
+Apps die exklusiv third-party login service nutzen
 
 - Facebook Login
 - Google Sign-In
@@ -215,10 +215,12 @@ Authorization Request returns:
 - *UserID* • eindeutig, stabil über alle Geräte mit gleicher AppleID
 - *Identity Token* • Nutzerverifizierung 
 - *Auth Code* • Refresh Token
-- *Vor- und Zuname* als PersonNameComponents
-- *Verifizierte Email* - entfällt beim Onboarding
 - *Real User Indicator* - Boolean: User / Unknown
 - *Credential State* - authorized, revoked, notFound
+- *Vor- und Zuname* als PersonNameComponents[^3]
+- *Verifizierte Email* - entfällt beim Onboarding[^3]
+
+[^3]: Facebook & Co leiten weit mehr Informationen weiter
 
 ^
 - userID: Bleibt unverändert • selbst nach Trennung von App & AppleID (Settings)
@@ -235,8 +237,8 @@ Authorization Request returns:
 - Fake Email per Relays
 - ~~Lästige Formulare~~
 - ~~Keyboard~~
-- ~~Keine Verifizierung~~
-- ~~Keine 2FA~~
+- ~~Verifizierung~~
+- ~~2FA~~
 
 ---
 
