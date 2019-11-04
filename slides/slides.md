@@ -17,17 +17,6 @@ slidenumber-style: alignment(right)
 
 ---
 
-# Agenda
-
-1. Wer bin ich & Wo arbeite ich?
-1. Überblick Sign in with Apple
-1. Registrierung vs. Login
-1. Live Coding
-1. Backend
-1. Zusammenfassung
-
----
-
 # About Me
 
 - Stefan Herold • *@blackjacxxx 🐦*
