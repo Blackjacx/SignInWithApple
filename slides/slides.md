@@ -88,7 +88,7 @@ slidenumber-style: alignment(right)
 - Registrierung und Login
 - App erhält[^1]
   - stabile, eindeutige *userID*
-  - *Vor- und Nachame*
+  - *Vor- und Nachname*
   - verifizierte *Email Adresse*
 
 --- 
