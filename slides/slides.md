@@ -1,10 +1,11 @@
 theme: Letters From Sweden, 4
 build-lists: false
 autoscale: true
-footer: Stefan Herold • ioki • 04.12.2019
 footer-style: alignment(center)
 slidenumbers: true
-slidenumber-style: alignment(right)
+slidenumber-style: alignment(left)
+
+<!-- footer: Stefan Herold • ioki • 04.12.2019 -->
 
 [.text: alignment(center)]
 
@@ -86,18 +87,19 @@ slidenumber-style: alignment(right)
 
 # Sicher
 
-- ~~Passwort~~
-- Anti-Fraud
-  - On-Device Machine Learning & Account History
+- Kein Passwort
+- Zwei-Faktor-Authentisierung 
+- Anti-Fraud (Glaubwürdigkeitsprüfung)
+  - Jahrelang entwickelter Algorithmus
+  - On-Device Machine Learning / Account History
   - 1-Bit-Info über Echtheit des Users
   - iOS only
-- Zwei-Faktor-Authentisierung 
 
 ---
 
 # Privat
 
-![right 75%](media/apps-lambus-settings.jpeg)
+![right 130%](media/apps-checkmark-settings.jpeg)
 
 Eindeutige, zufällige Email-Adresse
 *privaterelay.appleid.com*
@@ -105,7 +107,7 @@ Eindeutige, zufällige Email-Adresse
 - App sieht nur *diese* Adresse
 - Kommunikation mit *genau einem* Developer
 - Zwei-Wege-Kanal
-- Über Einstellungen änder-/deaktivierbar
+- Über Settings deaktivierbar
 -  speichert keine Emails
 
 ^
@@ -146,7 +148,7 @@ Apps die exklusiv third-party login service nutzen
 
 # Apps
 
-![right 75%](media/apps-bird.jpeg)
+![right 95%](media/apps-bird.jpeg)
 
 | App          | Email  | Name  |
 | ------------ | :----: | :---: |
@@ -167,7 +169,7 @@ Apps die exklusiv third-party login service nutzen
 
 # Apps
 
-![inline](media/apps-fretello.png) ![inline](media/apps-bird.jpeg) ![inline](media/apps-lambus.jpeg) ![inline](media/apps-bring.jpeg) ![inline](media/apps-blinkist.jpeg) 
+![inline](media/apps-fretello.png) ![inline](media/apps-lambus.jpeg) ![inline](media/apps-bring.jpeg) ![inline](media/apps-blinkist.jpeg) 
 
 ---
 
@@ -211,15 +213,14 @@ Authorization Request returns:
 
 # Registrierung
 
-![right 25%](media/apps-checkmark.png)
+![right 27%](media/apps-checkmark.png)
 
 - Name editierbar
 - Nutzer entscheidet über verwendete Email
 - Fake Email per Relays
-- ~~Lästige Formulare~~
-- ~~Keyboard~~
-- ~~Verifizierung~~
-- ~~2FA~~
+- Keine lästigen Formulare
+- Keine Verifizierung
+- Keine 2FA
 
 ---
 
@@ -333,12 +334,15 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 
 - 1.5h im 1. test mit Fragen zwischendurch
 - email addresse fett von screenshot in text übernehmen (bei `Privat`)
-- Vergleich mit Apple TV
+- Demo mit iPhone und Apple TV
 - Revoke vom Portal aus
 - getCredentialState läuft ohne netzwerkcall (mit conditioner 100% loss)
-- oauth diagramm eventuell rausnehmen :-)
+- oauth diagramm eventuell rausnehmen
 - ioki teil reduzieren
 - zusammenfassung eventuell rausnehmen
+- mein profilbild bei about als hintergrund - evtl mit vignette
+- gibt es ein url link in die ios settings den man direkt in die app bauen kann???
+- iCloud Credential in App bauen
 
 - use ioki iPhone 7 Plus phone number as trusted number
 - send the PDF presentation including the github url to ane@ix.de (due 27.11.)
