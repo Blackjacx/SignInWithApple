@@ -137,9 +137,15 @@ Apps die exklusiv third-party login service nutzen
 - Facebook oder Twitter Client
 - Mitarbeiterportal von Konzernen
 
----
+--- 
 
 # Apps
+
+![inline](media/apps-fretello.png) ![inline](media/apps-lambus.jpeg) ![inline](media/apps-bring.jpeg) ![inline](media/apps-blinkist.jpeg) 
+
+---
+
+# Registrieung
 
 ![right 95%](media/apps-bird.jpeg)
 
@@ -154,33 +160,17 @@ Apps die exklusiv third-party login service nutzen
 ^
 - E-Scooter Verleih
 - Travel Planner
-- Einkaufslistenapp mit Kundenkarten Wallet
-- Kurze Zusammenfassungen beliebter Sachbücher
+- Einkaufslistenapp mit Extras
+- Zusammenfassungen beliebter Bücher
 - Tracken von Paketsendungen
 
---- 
-
-# Apps
-
-![inline](media/apps-fretello.png) ![inline](media/apps-lambus.jpeg) ![inline](media/apps-bring.jpeg) ![inline](media/apps-blinkist.jpeg) 
-
----
-
-# Registrierung
-
-```swift
-func didPressSignInWithApple(_ sender: UIButton) {
-
-  let provider = ASAuthorizationAppleIDProvider()
-  let request = provider.createRequest()
-  request.requestedScopes = [.email, .fullName] // optional - only request what's required
-
-  let controller = ASAuthorizationController(authorizationRequests: [request])
-  controller.delegate = self
-  controller.presentationContextProvider = self
-  controller.performRequests()
-}
-```
+^
+• Name editierbar
+• Nutzer entscheidet über Email
+• Zufällige Email über Relays
+• Keine lästigen Formulare
+• Keine Verifizierung
+• Keine 2FA
 
 ---
 
@@ -201,45 +191,6 @@ Folgendes bekommen wir:
 ^
 - userID unverändert • selbst nach Trennung von App & AppleID (Settings)
 - userID: Account Recovery, Account Lockout, Customer Support
-
----
-
-# Registrierung
-
-![right 27%](media/apps-checkmark.png)
-
-- Name editierbar
-- Nutzer entscheidet über verwendete Email
-- Zufällige Email über Relays
-- Keine lästigen Formulare
-- Keine Verifizierung
-- Keine 2FA
-
----
-
-# Login
-
-Beim Appstart:
-
-```swift
-let provider = ASAuthorizationAppleIDProvider()
-
-provider.getCredentialState(forUserID: userId) { (state, error) in
-  // evaluate state
-}
-```
-
-State-Änderungen:
-
-```swift
-let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
-center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
-  self?.performSignOut()
-}
-```
-
-^
-- getCredentialState läuft lokal (mit conditioner 100% loss)
 
 ---
 
@@ -303,7 +254,11 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 
 ---
 
-# Backup - Mehr Links
+# Backup
+
+---
+
+# Mehr Links
 
 - Answers to your bruning questions
 *https://techcrunch.com/2019/06/07/answers-to-your-burning-questions-about-how-sign-in-with-apple-works*
@@ -337,17 +292,61 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 
 ---
 
-# Backend - OAuth
+# Registrierung
+
+```swift
+func didPressSignInWithApple(_ sender: UIButton) {
+
+  let provider = ASAuthorizationAppleIDProvider()
+  let request = provider.createRequest()
+  request.requestedScopes = [.email, .fullName] // optional - only request what's required
+
+  let controller = ASAuthorizationController(authorizationRequests: [request])
+  controller.delegate = self
+  controller.presentationContextProvider = self
+  controller.performRequests()
+}
+```
+
+---
+
+# Login
+
+Beim Appstart:
+
+```swift
+let provider = ASAuthorizationAppleIDProvider()
+
+provider.getCredentialState(forUserID: userId) { (state, error) in
+  // evaluate state
+}
+```
+
+State-Änderungen:
+
+```swift
+let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
+center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
+  self?.performSignOut()
+}
+```
+
+^
+- getCredentialState läuft lokal (mit conditioner 100% loss)
+
+---
+
+# OAuth
 
 ![inline](media/oauth.png)
 
 ---
 
-# Backup - Todo
+# Todo
 
 - 1.5h im 1. test mit Fragen zwischendurch
+- 1h ohne Fragen / ziemlich schnell / zu hause
 
 - use ioki iPhone 7 Plus phone number as trusted number
-- send the PDF presentation including the github url to ane@ix.de (due 27.11.)
 
 [^1]: https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what
