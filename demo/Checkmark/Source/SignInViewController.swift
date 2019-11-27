@@ -33,10 +33,22 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
                     case .authorized:   self?.performSignIn() // Apple ID credential is valid
                     case .revoked:      break // Apple ID credential revoked, sign user out on device and show sign in screen
                     case .notFound:     break // Apple ID credential not found, show signIn UI
-                    case .transferred:  break
-                    @unknown default:   break
+                    default:            break
                     }
                 }
+            }
+        }
+    }
+
+    // MARK: - Setup Revocation Listener
+
+    private func setupRevokationListener() {
+        let center = NotificationCenter.default
+        let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
+        center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
+            DispatchQueue.main.async { [weak self] in
+                guard self?.presentedViewController != nil else {return}
+                self?.performSignOut()
             }
         }
     }
@@ -59,29 +71,6 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         stack.addArrangedSubview(button)
     }
 
-    @objc func didPressSignInWithApple(_ sender: UIButton) {
-        let appleIdRequest = ASAuthorizationAppleIDProvider().createRequest()
-        // optional - only request what's required
-        appleIdRequest.requestedScopes = [.email, .fullName]
-
-        let controller = ASAuthorizationController(authorizationRequests: [appleIdRequest])
-        controller.presentationContextProvider = self
-        controller.delegate = self
-        controller.performRequests()
-    }
-
-    // MARK: - Setup Revocation Listener
-
-    private func setupRevokationListener() {
-        let center = NotificationCenter.default
-        let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
-        center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
-            DispatchQueue.main.async { [weak self] in
-                self?.performSignOut()
-            }
-        }
-    }
-
     private func performSignIn() {
         performSegue(withIdentifier: Constants.Segues.signedInSuccess, sender: nil)
     }
@@ -100,7 +89,20 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
     func prepareForUnwind(segue: UIStoryboardSegue) {
         performSignOut()
     }
-    
+
+    // MARK: - Button Actions
+
+    @objc func didPressSignInWithApple(_ sender: UIButton) {
+        let appleIdRequest = ASAuthorizationAppleIDProvider().createRequest()
+        // optional - only request what's required
+        appleIdRequest.requestedScopes = [.email, .fullName]
+
+        let controller = ASAuthorizationController(authorizationRequests: [appleIdRequest])
+        controller.presentationContextProvider = self
+        controller.delegate = self
+        controller.performRequests()
+    }
+
     @IBAction func didPressSignIn(_ sender: UIButton) {
         guard emailTextField.text?.isEmpty == false &&
             passwordTextField.text?.isEmpty == false else {
@@ -154,9 +156,9 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
                 credential.identityToken != nil &&
                 credential.authorizationCode != nil {
 
-                // register NEW account - returns you a token
+                // Register NEW account
             } else {
-                // get token from backend
+                // Login
             }
 
             // Use credential ONLY to create account on your server!
@@ -165,12 +167,11 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
 
             performSignIn()
 
-        default:
-            break
+        default: break
         }
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        // Handle userCancelled or any error
+        // Handle userCancelled and other errors
     }
 }

@@ -12,17 +12,19 @@ final class CredentialViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let userId = Keychain().string(for: Constants.Keys.userId)
+        // Unique, stable team-scoped user id.
+        // Stable across platforms and devices.
+        let userId = Keychain().string(for: Constants.Keys.userId).map {
+            return $0.dropLast(20) + String(repeating: "*", count: 20)
+        } ?? "-"
         let credential = GlobalState.appleIdCredential
 
-        // Identity token and code can be exchanged for an access token from
+        // Identity token and authCode can be exchanged for an access token on
         // your backend
 //        let identityToken = credential?.identityToken
 //        let authCode = credential?.authorizationCode
 
-        // Unique, stable team-scoped user id
-        // Stable across platforms and devices
-        userIdLabel.text = userId ?? "-"
+        userIdLabel.text = userId
         givenNameLabel.text = credential?.fullName?.givenName ?? "-"
         familyNameLabel.text = credential?.fullName?.familyName ?? "-"
         emailLabel.text = credential?.email ?? "-"
