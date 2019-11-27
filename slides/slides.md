@@ -28,51 +28,41 @@ slidenumber-style: alignment(left)
 
 # ioki
 
-![fill](media/ioki-bg-7.jpg)
-
-- Autonomous Driving
-- Erster fahrerloser Service Deutschlands
-- Bad Birnbach • Bayern
-- 2 km • Stadtzentrum - Bahnhof
-
-^
-1. Tochtergesellschaft DB
-2. 3 Säulen
-
----
-
-# ioki
+[.build-lists: true]
 
 ![fill](media/ioki-bg-8.jpg)
 
 - Demand Responsive Transport
-- Fahrzeuge nach Bedarf verteilt
 - Leuchtturmprojekt mit HVV Hamburg
+- Whitelabel Passenger App • iOS & Android
+- Driver App • React Native
+- Backend • Ruby
 
 ^
-- HVV -> Deutscher Mobilitätspresi 2019
-
----
-
-# ioki
-
-![fill](media/ioki-bg-5.jpg)
-
-- Whitelabel
-- Passenger App (iOS & Android nativ)
-- Driver App (Android Tablets mit React Native)
+- Tochtergesellschaft DB
+- Kunden: Landkreise, Verkehrsbertriebe, Firmen
+  - Autonomes Fahren
+  - Consulting durch Analytics Team mit Hilfe von Simulationen -> Bedarfsfelder für Kunden
+  - Demand Responsive Transport
+    - Transport von Personen von einem Ort zum Anderen
+    - Fahrzeuge nach Bedarf verteilen & dynamisch skalieren
 
 ---
 
 # Sign in with Apple
 
-- schnell, einfach, sicher und privat
-- kein Tracking durch Apple
+[.build-lists: true]
+
 - Registrierung und Login
-- App erhält[^1]
+- schnell, sicher und privat
+- kein Tracking durch Apple
+- App erhält:
   - stabile, eindeutige *userID*
   - *Vor- und Nachname*
   - verifizierte *Email Adresse*
+
+^
+- Facebook & Co leiten weit mehr Informationen weiter
 
 --- 
 
@@ -99,24 +89,27 @@ slidenumber-style: alignment(left)
 
 # Privat
 
+[.build-lists: true]
+
 ![right 130%](media/apps-checkmark-settings.jpeg)
 
-Eindeutige, zufällige Email-Adresse
+Eindeutige, zufällige Email
 *privaterelay.appleid.com*
 
-- App sieht nur *diese* Adresse
+App sieht nur *diese* Email
+
 - Kommunikation mit *genau einem* Developer
 - Zwei-Wege-Kanal
-- Über Settings deaktivierbar
 -  speichert keine Emails
+- Über Settings deaktivierbar
 
 ^
-- Facebook $ Co leiten original Email weiter
+- Facebook & Co leiten original Email weiter
 - Rückschlüsse auf Nutzerverhalten erschwert
 
 ---
 
-# Wer's braucht[^2]
+# Wer's braucht
 
 Apps die exklusiv third-party login service nutzen
 
@@ -163,7 +156,7 @@ Apps die exklusiv third-party login service nutzen
 - Travel Planner
 - Einkaufslistenapp mit Kundenkarten Wallet
 - Kurze Zusammenfassungen beliebter Sachbücher
-- Tracken von Versandstati
+- Tracken von Paketsendungen
 
 --- 
 
@@ -195,19 +188,19 @@ func didPressSignInWithApple(_ sender: UIButton) {
 
 [.build-lists: true]
 
-Authorization Request returns:
+Folgendes bekommen wir:
 
 - *UserID* • eindeutig, stabil über alle Geräte mit gleicher AppleID
 - *Identity Token* • Nutzerverifizierung 
 - *Auth Code* • Refresh Token
+- *Verifizierte Email* - entfällt beim Onboarding
+- *Vor- und Zuname* als PersonNameComponents
 - *Real User Indicator* - Boolean: User / Unknown
 - *Credential State* - authorized, revoked, notFound
-- *Vor- und Zuname* als PersonNameComponents
-- *Verifizierte Email* - entfällt beim Onboarding
 
 ^
-- userID: Bleibt unverändert • selbst nach Trennung von App & AppleID (Settings)
-- userID: Authorisierungs-Status, Accouint Recovery, Account Lockout, Customer Support
+- userID unverändert • selbst nach Trennung von App & AppleID (Settings)
+- userID: Account Recovery, Account Lockout, Customer Support
 
 ---
 
@@ -217,7 +210,7 @@ Authorization Request returns:
 
 - Name editierbar
 - Nutzer entscheidet über verwendete Email
-- Fake Email per Relays
+- Zufällige Email über Relays
 - Keine lästigen Formulare
 - Keine Verifizierung
 - Keine 2FA
@@ -231,7 +224,6 @@ Beim Appstart:
 ```swift
 let provider = ASAuthorizationAppleIDProvider()
 
-// Very fast API to be called on app launch to handle log-in state appropriately.
 provider.getCredentialState(forUserID: userId) { (state, error) in
   // evaluate state
 }
@@ -246,54 +238,57 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 }
 ```
 
+^
+- getCredentialState läuft lokal (mit conditioner 100% loss)
+
 ---
 
 # Demo 👨‍💻
 
-- Vorbereitung von Xcode
-- *Sign in with Apple* Button hinzufügen
+^
+- Capability ➡️ Xcode
+\> Xcode erzeugt AppID mit SIWA Cap
+- SIWA Button
 - Registrierung neuer Nutzer
 - Login registrierter Nutzer
 - Statuscheck beim Appstart
-- Logout Handling bei laufender App
-- Tokeninvalidierung durch Nutzer über iOS Settings
+- Auf Tokeninvalidierung reagieren
 
 ^
-1. SIWA Capability ➡️ Xcode
-2. Xcode erzeugt App ID mit SIWA Capability ➡️ Dev Portal
-3. CODE DEMO
-4. Revoke
+- Revoke von *appleid.apple.com*
 
 ---
 
 # Backend Good To Know
 
+[.build-lists: true]
+
 - Identity Token zur Verifizierung der *userID*
 - Private Key zum Entschlüsseln des Tokens
 - Token nur bei Registrierung - 10 min gültig
-- OAuth Flow (Access-/Refresh-Token) notwendig[^3]
-
----
-
-# Backend - OAuth
-
-![inline](media/oauth.png)
+- OAuth Flow (Access-/Refresh-Token) notwendig[^1]
 
 ---
 
 # Zusammenfassung
 
-- Überblick über Vorteile
+[.build-lists: true]
+
+- Überblick über Vor- / Nachteile
 - Was bedeuten Sicher & Privat
 - *Theorie:* Registrierung & Login
 - *Praxis:* Erweitern einer bestehenden App
-  - Einrichten von Developer Portal & Xcode
-  - Registrierung, Login, Statusänderungen
 - Exkurs Backend: *Fallstricke*
 
 ---
 
 # Vielen Dank Für's Zuhören 🎉
+
+🧐 Demo App Code & Slides
+*https://github.com/Blackjacx/SignInWithApple*
+📺 Introducing Sign In with Apple - Session Video Notes
+*https://github.com/Blackjacx/WWDC#introducing-sign-in-with-apple*
+
 
 👩‍💻 Apple Docs
 *https://developer.apple.com/sign-in-with-apple*
@@ -301,12 +296,7 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 *https://developer.apple.com/app-store/review/guidelines/#sign-in-with-apple*
 👨‍💻 REST API
 *https://developer.apple.com/documentation/signinwithapplerestapi*
-🧐 Demo App Code
-*https://github.com/Blackjacx/SignInWithApple*
-📺 Introducing Sign In with Apple - Session Video Notes
-*https://github.com/Blackjacx/WWDC#introducing-sign-in-with-apple*
-🔑 Token Handling im Backend
-*https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what*
+
 
 🐦 Twitter
 *@blackjacxxx*
@@ -327,28 +317,37 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 *https://developer.okta.com/blog/2019/06/04/what-the-heck-is-sign-in-with-apple*
 - 9To5Mac Artikel
 *https://9to5mac.com/2019/10/15/how-to-use-sign-in-with-apple-iphone-ipad-mac*
+- Token Handling im Backend
+*https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what*
+
+---
+
+# ioki
+
+![fill](media/ioki-bg-7.jpg)
+
+- Autonomous Driving
+- Erster fahrerloser Service Deutschlands
+- Bad Birnbach • Bayern
+- 2 km • Stadtzentrum - Bahnhof
+
+^
+1. Tochtergesellschaft DB
+2. 3 Säulen
+
+---
+
+# Backend - OAuth
+
+![inline](media/oauth.png)
 
 ---
 
 # Backup - Todo
 
 - 1.5h im 1. test mit Fragen zwischendurch
-- email addresse fett von screenshot in text übernehmen (bei `Privat`)
-- Demo mit iPhone und Apple TV
-- Revoke vom Portal aus
-- getCredentialState läuft ohne netzwerkcall (mit conditioner 100% loss)
-- oauth diagramm eventuell rausnehmen
-- ioki teil reduzieren
-- zusammenfassung eventuell rausnehmen
-- mein profilbild bei about als hintergrund - evtl mit vignette
-- gibt es ein url link in die ios settings den man direkt in die app bauen kann???
-- iCloud Credential in App bauen
 
 - use ioki iPhone 7 Plus phone number as trusted number
 - send the PDF presentation including the github url to ane@ix.de (due 27.11.)
 
-[^1]: Facebook & Co leiten weit mehr Informationen weiter
-
-[^2]: https://developer.apple.com/app-store/review/guidelines/#sign-in-with-apple
-
-[^3]: https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what
+[^1]: https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what
