@@ -7,52 +7,11 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
 
-    private let keychain = Keychain()
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupSignInWithAppleButton()
-        setupRevokationListener()
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        if let userId = keychain.string(for: Constants.Keys.userId) {
-
-            // Sign in with Apple userId found in keychain
-
-            let provider = ASAuthorizationAppleIDProvider()
-
-            // Very fast API to be called on app launch to handle log-in state appropriately.
-            provider.getCredentialState(forUserID: userId) { [weak self] (state, error) in
-
-                DispatchQueue.main.async { [weak self] in
-                    switch state {
-                    case .authorized:   self?.performSignIn() // Apple ID credential is valid
-                    case .revoked:      break // Apple ID credential revoked, sign user out on device and show sign in screen
-                    case .notFound:     break // Apple ID credential not found, show signIn UI
-                    default:            break
-                    }
-                }
-            }
-        }
-    }
-
-    // MARK: - Setup Revocation Listener
-
-    private func setupRevokationListener() {
-        let center = NotificationCenter.default
-        let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
-        center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
-            DispatchQueue.main.async { [weak self] in
-                guard self?.presentedViewController != nil else {return}
-                self?.performSignOut()
-            }
-        }
-    }
-
+    
     // MARK: - Setup Sign in with Apple Button
 
     private func setupSignInWithAppleButton() {
@@ -71,23 +30,9 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         stack.addArrangedSubview(button)
     }
 
-    private func performSignIn() {
-        performSegue(withIdentifier: Constants.Segues.signedInSuccess, sender: nil)
-    }
-
-    private func performSignOut() {
-        emailTextField.text = nil
-        passwordTextField.text = nil
-        keychain.signOut()
-        GlobalState.reset()
-        dismiss(animated: true, completion: nil)
-    }
-
-    // MARK: - IB Support
-
-    @IBAction
-    func prepareForUnwind(segue: UIStoryboardSegue) {
-        performSignOut()
+    private func handleSuccessfulSignIn() {
+        // Dismiss SignInViewController
+        dismiss(animated: true)
     }
 
     // MARK: - Button Actions
@@ -103,15 +48,15 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         controller.performRequests()
     }
 
-    @IBAction func didPressSignIn(_ sender: UIButton) {
+    @IBAction func didPressSignInWithEmail(_ sender: UIButton) {
         guard emailTextField.text?.isEmpty == false &&
             passwordTextField.text?.isEmpty == false else {
                 return
         }
 
-        // Exchange email & password for access token and store it in keychain
+        // Get access token and store it in keychain
 
-        performSignIn()
+        handleSuccessfulSignIn()
     }
 
     // MARK: - UITextFieldDelegate
@@ -148,7 +93,7 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
             let userId: String = credential.user
 
             // Store userID in keychain
-            keychain.set(userId, key: Constants.Keys.userId)
+            Keychain.shared.set(userId, key: Constants.Keys.userId)
 
             // Register or sign in
             if credential.fullName != nil &&
@@ -165,9 +110,14 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
             // For the purpose of this demo, remember it.
             GlobalState.appleIdCredential = credential
 
-            performSignIn()
+            handleSuccessfulSignIn()
 
-        default: break
+        case let credential as ASPasswordCredential:
+            print("Received credential from keychain \(credential.user)")
+            break
+
+        default:
+            break
         }
     }
 

@@ -14,7 +14,7 @@ final class CredentialViewController: UIViewController {
 
         // Unique, stable team-scoped user id.
         // Stable across platforms and devices.
-        let userId = Keychain().string(for: Constants.Keys.userId).map {
+        let userId = Keychain.shared.string(for: Constants.Keys.userId).map {
             return $0.dropLast(20) + String(repeating: "*", count: 20)
         } ?? "-"
         let credential = GlobalState.appleIdCredential

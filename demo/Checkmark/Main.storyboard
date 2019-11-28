@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="acP-Ll-DFX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="DZw-ch-ONT">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
@@ -10,7 +10,7 @@
         <!--Sign In View Controller-->
         <scene sceneID="cHG-lb-ZPr">
             <objects>
-                <viewController id="acP-Ll-DFX" customClass="SignInViewController" customModule="Checkmark" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SignInViewController" modalPresentationStyle="fullScreen" id="acP-Ll-DFX" customClass="SignInViewController" customModule="Checkmark" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xAA-qM-T5G">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -77,7 +77,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="didPressSignIn:" destination="acP-Ll-DFX" eventType="touchUpInside" id="6Ih-hw-4UB"/>
+                                                    <action selector="didPressSignInWithEmail:" destination="acP-Ll-DFX" eventType="touchUpInside" id="EUe-2j-b0J"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -97,23 +97,22 @@
                         <outlet property="emailTextField" destination="4E4-bs-cPt" id="ksg-ec-f3N"/>
                         <outlet property="passwordTextField" destination="tW4-aD-BJz" id="Roy-T6-IJv"/>
                         <outlet property="stack" destination="SGX-rF-qPf" id="3OE-NC-12G"/>
-                        <segue destination="DZw-ch-ONT" kind="show" identifier="signin.success" id="RHZ-uG-IjF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a8k-Ob-vf9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-923" y="-185"/>
+            <point key="canvasLocation" x="-923" y="-181"/>
         </scene>
         <!-- Credential Details-->
         <scene sceneID="X4K-4b-1sJ">
             <objects>
                 <viewController modalPresentationStyle="fullScreen" id="EhA-Dc-STR" customClass="CredentialViewController" customModule="Checkmark" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="K7B-uo-wsE">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rbj-BK-2Y9">
-                                <rect key="frame" x="20" y="67" width="374" height="297.5"/>
+                                <rect key="frame" x="20" y="99" width="374" height="297.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="User ID" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0WF-1g-Ph9">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="26.5"/>
@@ -202,9 +201,9 @@
         <!--CHECKMARK-->
         <scene sceneID="BgL-X3-ISw">
             <objects>
-                <tableViewController id="U7k-bu-dGH" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="RootViewController" id="U7k-bu-dGH" customClass="RootViewController" customModule="Checkmark" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="McX-8b-VoQ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="e3F-g6-GL6">
@@ -417,14 +416,12 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Sign Out" id="EtZ-tb-brW">
                             <connections>
-                                <action selector="signOut2:" destination="Jcf-Hl-owS" id="1a0-HI-SH2"/>
-                                <segue destination="Jcf-Hl-owS" kind="unwind" unwindAction="prepareForUnwindWithSegue:" id="EC1-NR-mqJ"/>
+                                <action selector="didPressSignOut:" destination="U7k-bu-dGH" id="wJw-lZ-aaP"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DNo-9i-8q7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="Jcf-Hl-owS" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-184" y="503"/>
         </scene>

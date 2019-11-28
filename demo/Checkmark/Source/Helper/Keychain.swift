@@ -6,6 +6,8 @@ import UIKit
 /// `swift keychain wrapper github`.
 struct Keychain {
 
+    static let shared = Keychain()
+    
     func set(_ text: String, key: String) {
         UserDefaults.standard.set(text, forKey: key)
     }
