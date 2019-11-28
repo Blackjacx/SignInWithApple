@@ -8,7 +8,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        let userId = Keychain.shared.string(for: Constants.Keys.userId) ?? ""
+        guard let userId = Keychain.shared.string(for: Constants.Keys.userId) else {
+            performSignOut()
+            return true
+        }
+
         let provider = ASAuthorizationAppleIDProvider()
 
         // Fast API to be called on app launch to handle log-in state appropriately.
@@ -20,29 +24,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             case .revoked, .notFound:
 
-                // Apple ID credential revoked -> sign user out on device
+                // Apple ID credential revoked
                 // - or -
                 // The Apple ID credential was not found.
                 //
                 // Show the sign-in UI.
 
-                self?.showLoginScreen()
+                self?.performSignOut()
 
             default:
                 break
             }
         }
 
+        // Setup Revocation Listener
+
+        let center = NotificationCenter.default
+        let name = ASAuthorizationAppleIDProvider.credentialRevokedNotification
+        center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
+            DispatchQueue.main.async { [weak self] in
+                guard self?.window?.rootViewController?.presentingViewController == nil else {return}
+                self?.performSignOut()
+            }
+        }
+
         return true
     }
 
-    private func showLoginScreen() {
+    private func performSignOut() {
 
-        DispatchQueue.main.async { [weak self] in
-            let viewController = Constants.signInViewController
-            self?.window?.rootViewController?.present(viewController,
-                                                      animated: true,
-                                                      completion: nil)
+        DispatchQueue.main.async {
+            GlobalState.performSignOut()
         }
     }
 }

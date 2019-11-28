@@ -11,7 +11,7 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         setupSignInWithAppleButton()
     }
-    
+
     // MARK: - Setup Sign in with Apple Button
 
     private func setupSignInWithAppleButton() {
@@ -23,26 +23,22 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         let selector = #selector(didPressSignInWithApple)
         button.addTarget(self, action: selector, for: .touchUpInside)
 
-        // Apply app style
         button.cornerRadius = 22
         button.heightAnchor.constraint(equalToConstant: 44).isActive = true
 
         stack.addArrangedSubview(button)
     }
 
-    private func handleSuccessfulSignIn() {
-        // Dismiss SignInViewController
-        dismiss(animated: true)
-    }
-
     // MARK: - Button Actions
 
     @objc func didPressSignInWithApple(_ sender: UIButton) {
-        let appleIdRequest = ASAuthorizationAppleIDProvider().createRequest()
-        // optional - only request what's required
-        appleIdRequest.requestedScopes = [.email, .fullName]
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let appleIdAuthRequest = appleIDProvider.createRequest()
 
-        let controller = ASAuthorizationController(authorizationRequests: [appleIdRequest])
+        // Optional - only request what's required
+        appleIdAuthRequest.requestedScopes = [.email, .fullName]
+
+        let controller = ASAuthorizationController(authorizationRequests: [appleIdAuthRequest])
         controller.presentationContextProvider = self
         controller.delegate = self
         controller.performRequests()
@@ -57,6 +53,11 @@ final class SignInViewController: UIViewController, UITextFieldDelegate {
         // Get access token and store it in keychain
 
         handleSuccessfulSignIn()
+    }
+
+    private func handleSuccessfulSignIn() {
+        // Dismiss SignInViewController
+        dismiss(animated: true)
     }
 
     // MARK: - UITextFieldDelegate
@@ -81,7 +82,6 @@ extension SignInViewController: ASAuthorizationControllerPresentationContextProv
     }
 }
 
-// Delegates are guaranteed to be called on the apps main queue
 extension SignInViewController: ASAuthorizationControllerDelegate {
 
     func authorizationController(controller: ASAuthorizationController,
@@ -111,10 +111,6 @@ extension SignInViewController: ASAuthorizationControllerDelegate {
             GlobalState.appleIdCredential = credential
 
             handleSuccessfulSignIn()
-
-        case let credential as ASPasswordCredential:
-            print("Received credential from keychain \(credential.user)")
-            break
 
         default:
             break
