@@ -100,8 +100,8 @@ App sieht nur *diese* Email
 
 - Kommunikation mit *genau einem* Developer
 - Zwei-Wege-Kanal
--  speichert keine Emails
-- Über Settings deaktivierbar
+- Kein speichern von Emails
+- Weiterleitung deaktivierbar
 
 ^
 - Facebook & Co leiten original Email weiter
@@ -127,7 +127,7 @@ Apps die exklusiv third-party login service nutzen
 [.build-lists: true]
 
 - App nutzt firmeneigenes Login-System
-- App nutzt Ausweisbasiertes Login-System
+- App nutzt ausweisbasiertes Login-System
 - App ist Client für 3rd party / social service
 - Bildungs-, Enterprise- oder Business-App mit existierendem Firmen-Account
 
@@ -145,7 +145,7 @@ Apps die exklusiv third-party login service nutzen
 
 ---
 
-# Registrieung
+# Registrierung
 
 ![right 95%](media/apps-bird.jpeg)
 
@@ -215,8 +215,8 @@ Folgendes bekommen wir:
 [.build-lists: true]
 
 - Identity Token zur Verifizierung der *userID*
-- Private Key zum Entschlüsseln des Tokens
 - Token nur bei Registrierung - 10 min gültig
+- Login stellt nur *userId* zur Verfügung
 - OAuth Flow (Access-/Refresh-Token) notwendig[^1]
 
 ---
@@ -345,8 +345,11 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 # Todo
 
 - 1.5h im 1. test mit Fragen zwischendurch
-- 1h ohne Fragen / ziemlich schnell / zu hause
+- 1h zu hause / ohne Fragen / ziemlich schnell
+- 45 min bei ioki / ohne Fragen / medium schnell
 
+- Zusammenfassung eventuell rausnehmen
+- Anfang irgendwie kürzer machen
 - use ioki iPhone 7 Plus phone number as trusted number
 
 [^1]: https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what
