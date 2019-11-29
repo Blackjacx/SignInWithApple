@@ -8,6 +8,8 @@ final class CredentialViewController: UIViewController {
     @IBOutlet weak var familyNameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var realUserLabel: UILabel!
+    @IBOutlet weak var tokenLabel: UILabel!
+    @IBOutlet weak var codeLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,13 +23,15 @@ final class CredentialViewController: UIViewController {
 
         // Identity token and authCode can be exchanged for an access token on
         // your backend
-//        let identityToken = credential?.identityToken
-//        let authCode = credential?.authorizationCode
+        let identityToken = credential?.identityToken
+        let authCode = credential?.authorizationCode
 
         userIdLabel.text = userId
         givenNameLabel.text = credential?.fullName?.givenName ?? "-"
         familyNameLabel.text = credential?.fullName?.familyName ?? "-"
         emailLabel.text = credential?.email ?? "-"
+        tokenLabel.text = identityToken.map { "\($0)" } ?? "-"
+        codeLabel.text = authCode.map { "\($0)" } ?? "-"
 
         // ASUserDetectionStatusUnsupported Not supported on current platform, ignore the value
         // ASUserDetectionStatusUnknown     We could not determine the value.
