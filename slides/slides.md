@@ -113,12 +113,12 @@ App sieht nur *diese* Email
 
 Apps die exklusiv third-party login service nutzen
 
-- Facebook Login
-- Google Sign-In
-- Sign in with Twitter
-- Sign In with Linked-In
-- Login with Amazon
-- WeChat Login
+- *Facebook* Login
+- *Google* Sign-In
+- Sign in with *Twitter*
+- Sign In with *Linked-In*
+- Login with *Amazon*
+- *WeChat* Login
 
 ---
 
@@ -181,12 +181,12 @@ Apps die exklusiv third-party login service nutzen
 Folgendes bekommen wir:
 
 - *UserID* • eindeutig, stabil über alle Geräte mit gleicher AppleID
-- *Identity Token* • Nutzerverifizierung 
+- *Identity Token* • JWT zur Nutzerverifizierung • 10 min
 - *Auth Code* • Refresh Token
-- *Verifizierte Email* - entfällt beim Onboarding
-- *Vor- und Zuname* als PersonNameComponents
-- *Real User Indicator* - Boolean: User / Unknown
-- *Credential State* - authorized, revoked, notFound
+- *Verifizierte Email* • entfällt beim Onboarding
+- *Vor- und Zuname* • PersonNameComponents
+- *Real User Indicator* • Boolean: User / Unknown
+- *Credential State* • authorized, revoked, notFound
 
 ^
 - userID unverändert • selbst nach Trennung von App & AppleID (Settings)
@@ -210,17 +210,6 @@ Folgendes bekommen wir:
 
 ---
 
-# Backend Good To Know
-
-[.build-lists: true]
-
-- Identity Token zur Verifizierung der *userID*
-- Token nur bei Registrierung - 10 min gültig
-- Login stellt nur *userId* zur Verfügung
-- OAuth Flow (Access-/Refresh-Token) notwendig[^1]
-
----
-
 # Zusammenfassung
 
 [.build-lists: true]
@@ -229,7 +218,6 @@ Folgendes bekommen wir:
 - Was bedeuten Sicher & Privat
 - *Theorie:* Registrierung & Login
 - *Praxis:* Erweitern einer bestehenden App
-- Exkurs Backend: *Fallstricke*
 
 ---
 
@@ -254,26 +242,35 @@ Folgendes bekommen wir:
 
 ---
 
-# Backup
-
----
-
 # Mehr Links
 
 - Answers to your bruning questions
 *https://techcrunch.com/2019/06/07/answers-to-your-burning-questions-about-how-sign-in-with-apple-works*
+- Token Handling im Backend
+*https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what*
 - Ray Wenderlich Tutorial mit SwiftUI
 *https://www.raywenderlich.com/4875322-sign-in-with-apple-using-swiftui*
-- Erzeugen des Private Keys
-*https://developer.apple.com/account/resources/authkeys/add*
-- Konfiguration erlaubter Email-Adressen
-*https://developer.apple.com/account/resources/services/configure*
 - Sign in with Apple für Web
 *https://developer.okta.com/blog/2019/06/04/what-the-heck-is-sign-in-with-apple*
 - 9To5Mac Artikel
 *https://9to5mac.com/2019/10/15/how-to-use-sign-in-with-apple-iphone-ipad-mac*
-- Token Handling im Backend
-*https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what*
+- How to integrate Sign In with Apple in your iOS app
+*https://benoitpasquier.com/how-to-integrate-sign-in-with-apple-ios/*
+- Auth0 - Sign In With Apple
+*https://auth0.com/docs/quickstart/native/ios-swift-siwa/00-login*
+- Why sign-in with apple may take you more than 5 minutes and how it works?
+*https://dev.to/michalrogowski/why-sign-in-with-apple-may-take-you-more-than-5-minutes-and-how-it-works-55p6*
+
+- Erzeugen des Private Keys
+*https://developer.apple.com/account/resources/authkeys/add*
+- Konfiguration erlaubter Email-Adressen
+*https://developer.apple.com/account/resources/services/configure*
+- Why isn't the user data being returned every time?
+*https://forums.developer.apple.com/thread/119826*
+
+---
+
+# Backup
 
 ---
 
@@ -351,5 +348,3 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 - Zusammenfassung eventuell rausnehmen
 - Anfang irgendwie kürzer machen
 - use ioki iPhone 7 Plus phone number as trusted number
-
-[^1]: https://blog.curtisherbert.com/so-theyve-signed-in-with-apple-now-what
