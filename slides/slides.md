@@ -80,9 +80,9 @@ slidenumber-style: alignment(left)
 - Kein Passwort
 - Zwei-Faktor-Authentisierung 
 - Anti-Fraud (Glaubwürdigkeitsprüfung)
+  - 1-Bit-Info über Echtheit des Users
   - Jahrelang entwickelter Algorithmus
   - On-Device Machine Learning / Account History
-  - 1-Bit-Info über Echtheit des Users
   - iOS only
 
 ---
@@ -185,7 +185,7 @@ Folgendes bekommen wir:
 - *Auth Code* • Refresh Token
 - *Verifizierte Email* • entfällt beim Onboarding
 - *Vor- und Zuname* • PersonNameComponents
-- *Real User Indicator* • Boolean: User / Unknown
+- *Real User Indicator* • Enum: .real / .unknown / .unsupported
 - *Credential State* • authorized, revoked, notFound
 
 ^
@@ -207,17 +207,6 @@ Folgendes bekommen wir:
 
 ^
 - Revoke von *appleid.apple.com*
-
----
-
-# Zusammenfassung
-
-[.build-lists: true]
-
-- Überblick über Vor- / Nachteile
-- Was bedeuten Sicher & Privat
-- *Theorie:* Registrierung & Login
-- *Praxis:* Erweitern einer bestehenden App
 
 ---
 
@@ -345,6 +334,6 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 - 1h zu hause / ohne Fragen / ziemlich schnell
 - 45 min bei ioki / ohne Fragen / medium schnell
 
-- Zusammenfassung eventuell rausnehmen
+- copy coding snippets in the presentation as backup
 - Anfang irgendwie kürzer machen
 - use ioki iPhone 7 Plus phone number as trusted number
