@@ -13,10 +13,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
 
-        let provider = ASAuthorizationAppleIDProvider()
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
 
         // Fast API to be called on app launch to handle log-in state appropriately.
-        provider.getCredentialState(forUserID: userId) { [weak self] (credentialState, error) in
+        appleIDProvider.getCredentialState(forUserID: userId) { [weak self] (credentialState, error) in
 
             switch credentialState {
             case .authorized:

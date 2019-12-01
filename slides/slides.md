@@ -79,11 +79,13 @@ slidenumber-style: alignment(left)
 
 - Kein Passwort
 - Zwei-Faktor-Authentisierung 
-- Anti-Fraud (Glaubwürdigkeitsprüfung)
-  - 1-Bit-Info über Echtheit des Users
-  - Jahrelang entwickelter Algorithmus
-  - On-Device Machine Learning / Account History
-  - iOS only
+- Anti-Fraud
+
+^
+- 1-Bit-Info über Echtheit des Users
+- Jahrelang entwickelter Algorithmus
+- On-Device Machine Learning / Account History
+- iOS only
 
 ---
 
@@ -111,14 +113,11 @@ App sieht nur *diese* Email
 
 # Wer's braucht
 
-Apps die exklusiv third-party login service nutzen
+Apps die exklusiv 3rd party login services nutzen
 
-- *Facebook* Login
-- *Google* Sign-In
-- Sign in with *Twitter*
-- Sign In with *Linked-In*
-- Login with *Amazon*
-- *WeChat* Login
+- Facebook, Google, Twitter, Linked-In, Amazon, WeChat, ...
+- Pflicht für neue Apps: *ab heute*
+- Pflicht für existierende Apps: *ab April 2020*
 
 ---
 
@@ -158,19 +157,11 @@ Apps die exklusiv third-party login service nutzen
 | Parcel       | ❌     | ❌   | 
 
 ^
-- E-Scooter Verleih
-- Travel Planner
-- Einkaufslistenapp mit Extras
-- Zusammenfassungen beliebter Bücher
-- Tracken von Paketsendungen
-
-^
 • Name editierbar
 • Nutzer entscheidet über Email
-• Zufällige Email über Relays
 • Keine lästigen Formulare
 • Keine Verifizierung
-• Keine 2FA
+• 2FA einfach wie Touch- / FaceID
 
 ---
 
@@ -190,7 +181,9 @@ Folgendes bekommen wir:
 
 ^
 - userID unverändert • selbst nach Trennung von App & AppleID (Settings)
-- userID: Account Recovery, Account Lockout, Customer Support
+- ermöglich Backend-Features wie Account Recovery, Account Lockout
+- Customer Support sehr vereinfacht
+- Verhindert Nutzer Duplikate in DB
 
 ---
 
