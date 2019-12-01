@@ -312,9 +312,3 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 
 ^
 - getCredentialState läuft lokal (mit conditioner 100% loss)
-
----
-
-# OAuth
-
-![inline](media/oauth.png)
