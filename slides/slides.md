@@ -318,15 +318,3 @@ center.addObserver(forName: name, object: nil, queue: nil) { [weak self] _ in
 # OAuth
 
 ![inline](media/oauth.png)
-
----
-
-# Todo
-
-- 1.5h im 1. test mit Fragen zwischendurch
-- 1h zu hause / ohne Fragen / ziemlich schnell
-- 45 min bei ioki / ohne Fragen / medium schnell
-
-- copy coding snippets in the presentation as backup
-- Anfang irgendwie kürzer machen
-- use ioki iPhone 7 Plus phone number as trusted number
