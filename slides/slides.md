@@ -59,7 +59,7 @@ slidenumber-style: alignment(left)
 - App erhält:
   - stabile, eindeutige *userID*
   - *Vor- und Nachname*
-  - verifizierte *Email Adresse*
+  - *Email Adresse*
 
 ^
 - Facebook & Co leiten weit mehr Informationen weiter
@@ -75,7 +75,7 @@ slidenumber-style: alignment(left)
 
 ---
 
-# Sicher
+# Sicherheit
 
 - Kein Passwort
 - Zwei-Faktor-Authentisierung 
@@ -89,7 +89,7 @@ slidenumber-style: alignment(left)
 
 ---
 
-# Privat
+# Privatsphäre
 
 [.build-lists: true]
 
@@ -113,9 +113,9 @@ App sieht nur *diese* Email
 
 # Wer's braucht
 
-Apps die exklusiv 3rd party login services nutzen
+Apps die exklusiv 3rd-Party Login-Services nutzen
 
-- Facebook, Google, Twitter, Linked-In, Amazon, WeChat, ...
+- *Facebook*, *Google*, *Twitter*, *Linked-In*, *Amazon*, ...
 - Pflicht für neue Apps: *ab heute*
 - Pflicht für existierende Apps: *ab April 2020*
 
@@ -176,13 +176,13 @@ Folgendes bekommen wir:
 - *Auth Code* • Refresh Token
 - *Verifizierte Email* • entfällt beim Onboarding
 - *Vor- und Zuname* • PersonNameComponents
-- *Real User Indicator* • Enum: .real / .unknown / .unsupported
-- *Credential State* • authorized, revoked, notFound
+- *Real User Indicator* • Enum: likelyReal, unknown, unsupported
 
 ^
-- userID unverändert • selbst nach Trennung von App & AppleID (Settings)
+UserID unverändert
+- selbst nach Trennung der App von SIWA > iOS Settings
 - ermöglich Backend-Features wie Account Recovery, Account Lockout
-- Customer Support sehr vereinfacht
+- Customer Support stark vereinfacht
 - Verhindert Nutzer Duplikate in DB
 
 ---
